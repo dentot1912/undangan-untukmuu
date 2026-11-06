@@ -47,7 +47,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-rose-50/40 text-stone-800 antialiased selection:bg-rose-200 selection:text-rose-900">
+      <body className="min-h-screen bg-pink-100/60 text-stone-800 antialiased selection:bg-pink-300 selection:text-pink-950">
         {children}
       </body>
     </html>

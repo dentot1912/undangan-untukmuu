@@ -12,7 +12,8 @@
 
 body {
   font-family: var(--font-sans-main);
-  background: linear-gradient(135deg, #fff1f2 0%, #fdf2f8 50%, #fff7ed 100%);
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 35%, #f472b6 100%);
+  background-attachment: fixed;
   min-height: 100vh;
   color: #374151;
   overflow-x: hidden;

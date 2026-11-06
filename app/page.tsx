@@ -28,7 +28,7 @@ import {
 
 // Default YouTube Video ID (bisa diganti dengan ID lagu YouTube favorit Anda kapan saja)
 // Contoh lagu romantis piano / lofi: "jfKfPfyJRdk" (Lofi Hip Hop) atau "2li_c24Q0Yk" (Romantic Piano)
-const DEFAULT_YT_VIDEO_ID = "2Vv-BfVoq4g";
+const DEFAULT_YT_VIDEO_ID = "cNGjD0VG4R8";
 
 export default function MysteryInvitationPage() {
   const [currentStep, setCurrentStep] = useState(1);
@@ -51,6 +51,16 @@ export default function MysteryInvitationPage() {
   const [guessAnswer, setGuessAnswer] = useState("");
   const [herMessage, setHerMessage] = useState("");
   const [copied, setCopied] = useState(false);
+
+  // Typing animation states for Step 3
+  const [displayedText1, setDisplayedText1] = useState("");
+  const [displayedText2, setDisplayedText2] = useState("");
+  const [showDateBox, setShowDateBox] = useState(false);
+
+  // Typing animation states for Clues (Step 4, 5, 6)
+  const [displayedClue1, setDisplayedClue1] = useState("");
+  const [displayedClue2, setDisplayedClue2] = useState("");
+  const [displayedClue3, setDisplayedClue3] = useState("");
 
   // Playful reject button
   const [noCount, setNoCount] = useState(0);
@@ -125,6 +135,125 @@ export default function MysteryInvitationPage() {
 
     loadYT();
   }, []);
+
+  // Typing animation effect when reaching Step 3
+  useEffect(() => {
+    if (currentStep !== 3) {
+      setDisplayedText1("");
+      setDisplayedText2("");
+      setShowDateBox(false);
+      return;
+    }
+
+    const fullText1 =
+      "Ketika kamu membuka undangan ini, ada sesuatu yang berbeda dari undangan yang sebelum-sebelumnya. Kali ini izinkan aku mengajakmu menunjukan sesuatu yang akan menjadi pertama kali dari bagian cerita hidupku.";
+    const fullText2 =
+      "Tapi kali ini aku tidak menunjukan dimana tempatnya ataupun rundown acaranya, melainkan aku ingin memberikan clue yang dimana jawabannya akan aku beri tahu saat hari H...";
+
+    let idx1 = 0;
+    let idx2 = 0;
+    let timeoutId: NodeJS.Timeout;
+
+    const typeFirstParagraph = () => {
+      if (idx1 < fullText1.length) {
+        setDisplayedText1(fullText1.slice(0, idx1 + 1));
+        idx1++;
+        timeoutId = setTimeout(typeFirstParagraph, 28);
+      } else {
+        timeoutId = setTimeout(typeSecondParagraph, 350);
+      }
+    };
+
+    const typeSecondParagraph = () => {
+      if (idx2 < fullText2.length) {
+        setDisplayedText2(fullText2.slice(0, idx2 + 1));
+        idx2++;
+        timeoutId = setTimeout(typeSecondParagraph, 28);
+      } else {
+        timeoutId = setTimeout(() => {
+          setShowDateBox(true);
+        }, 400);
+      }
+    };
+
+    timeoutId = setTimeout(typeFirstParagraph, 300);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [currentStep]);
+
+  // Typing animation effect for Clue #1 (Step 4)
+  useEffect(() => {
+    if (currentStep !== 4) {
+      setDisplayedClue1("");
+      return;
+    }
+
+    const fullClue1 =
+      "Tidak semua momen berharga harus terjadi di dalam ruangan tertutup. Terkadang, semesta justru menjadi saksi terbaik bagi sebuah cerita, Dimanakah aku??";
+    let idx = 0;
+    let timeoutId: NodeJS.Timeout;
+
+    const typeClue1 = () => {
+      if (idx < fullClue1.length) {
+        setDisplayedClue1(fullClue1.slice(0, idx + 1));
+        idx++;
+        timeoutId = setTimeout(typeClue1, 26);
+      }
+    };
+
+    timeoutId = setTimeout(typeClue1, 250);
+    return () => clearTimeout(timeoutId);
+  }, [currentStep]);
+
+  // Typing animation effect for Clue #2 (Step 5)
+  useEffect(() => {
+    if (currentStep !== 5) {
+      setDisplayedClue2("");
+      return;
+    }
+
+    const fullClue2 =
+      "Aku menjadi bagian dari sesuatu yang di abadikan seseorang di media sosial. Bukan karena aku langka, tetapi karena ada seseorang yang begitu menyukai keindahanku. Apakah aku?";
+    let idx = 0;
+    let timeoutId: NodeJS.Timeout;
+
+    const typeClue2 = () => {
+      if (idx < fullClue2.length) {
+        setDisplayedClue2(fullClue2.slice(0, idx + 1));
+        idx++;
+        timeoutId = setTimeout(typeClue2, 26);
+      }
+    };
+
+    timeoutId = setTimeout(typeClue2, 250);
+    return () => clearTimeout(timeoutId);
+  }, [currentStep]);
+
+  // Typing animation effect for Clue #3 (Step 6)
+  useEffect(() => {
+    if (currentStep !== 6) {
+      setDisplayedClue3("");
+      return;
+    }
+
+    const fullClue3 =
+      "Ada pertarungan yang tidak terlihat oleh siapa pun. Bukan tentang menang atau kalah, bukan pula tentang siapa yang paling kuat. Namun, tentang keberanian untuk menunjukan satu kemungkinan yang belum tentu sesuai harapan.";
+    let idx = 0;
+    let timeoutId: NodeJS.Timeout;
+
+    const typeClue3 = () => {
+      if (idx < fullClue3.length) {
+        setDisplayedClue3(fullClue3.slice(0, idx + 1));
+        idx++;
+        timeoutId = setTimeout(typeClue3, 26);
+      }
+    };
+
+    timeoutId = setTimeout(typeClue3, 250);
+    return () => clearTimeout(timeoutId);
+  }, [currentStep]);
 
   const toggleMusic = () => {
     if (!ytPlayerRef.current) return;
@@ -474,17 +603,27 @@ x
               </span>
             </div>
 
-            {/* Kata-kata panjang dari user */}
-            <div className="p-5 sm:p-8 glass-card-inner rounded-3xl text-left text-stone-800 text-xs sm:text-base leading-relaxed sm:leading-loose border border-rose-200/80 shadow-sm space-y-3 sm:space-y-4">
+            {/* Kata-kata panjang dari user dengan animasi typing */}
+            <div className="p-5 sm:p-8 glass-card-inner rounded-3xl text-left text-stone-800 text-xs sm:text-base leading-relaxed sm:leading-loose border border-rose-200/80 shadow-sm space-y-3 sm:space-y-4 min-h-[220px]">
               <p>
-                Ketika kamu membuka undangan ini, ada sesuatu yang berbeda dari undangan yang sebelum-sebelumnya. Kali ini izinkan aku mengajakmu menunjukan sesuatu yang akan menjadi pertama kali dari bagian cerita hidupku.
+                {displayedText1}
+                {!displayedText2 && displayedText1.length < 200 && (
+                  <span className="inline-block w-1.5 h-4 bg-rose-500 ml-1 animate-pulse align-middle" />
+                )}
               </p>
-              <p>
-                Tapi kali ini aku tidak menunjukan dimana tempatnya ataupun rundown acaranya, melainkan aku ingin memberikan clue yang dimana jawabannya akan aku beri tahu saat hari H...
-              </p>
-              <div className="p-3 sm:p-4 bg-gradient-to-r from-rose-100 to-pink-100 rounded-2xl border border-rose-200 text-center font-bold text-rose-700 text-sm sm:text-lg">
-                Yaitu: 14 November 2026
-              </div>
+              {displayedText1.length >= 200 && (
+                <p>
+                  {displayedText2}
+                  {!showDateBox && (
+                    <span className="inline-block w-1.5 h-4 bg-rose-500 ml-1 animate-pulse align-middle" />
+                  )}
+                </p>
+              )}
+              {showDateBox && (
+                <div className="p-3 sm:p-4 bg-gradient-to-r from-rose-100 to-pink-100 rounded-2xl border border-rose-200 text-center font-bold text-rose-700 text-sm sm:text-lg animate-fade-in shadow-sm">
+                  Yaitu: 14 November 2026
+                </div>
+              )}
             </div>
 
             {/* Responsive Bottom Navigation Buttons */}
@@ -518,14 +657,19 @@ x
               </h2>
             </div>
 
-            {/* Quote Clue #1 */}
-            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-amber-500 text-left shadow-sm">
+            {/* Quote Clue #1 dengan animasi typing */}
+            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-amber-500 text-left shadow-sm min-h-[140px]">
               <p className="text-xl sm:text-3xl text-rose-600 mb-2.5 leading-snug">
-                &ldquo;Tidak semua momen berharga harus terjadi di dalam ruangan tertutup. Terkadang, semesta justru menjadi saksi terbaik bagi sebuah cerita, Dimanakah aku??&rdquo;
+                &ldquo;{displayedClue1}&rdquo;
+                {displayedClue1.length < 140 && (
+                  <span className="inline-block w-1.5 h-4 bg-amber-500 ml-1 animate-pulse align-middle" />
+                )}
               </p>
-              <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium">
-                Tempat ini membiarkan angin berhembus bebas, langit terbentang tanpa batas, dan kita bisa menikmati waktu tanpa tergesa-gesa.
-              </p>
+              {displayedClue1.length >= 140 && (
+                <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium animate-fade-in">
+                  Tempat ini membiarkan angin berhembus bebas, langit terbentang tanpa batas, dan kita bisa menikmati waktu tanpa tergesa-gesa.
+                </p>
+              )}
             </div>
 
             <p className="text-stone-500 text-[11px] sm:text-sm italic">
@@ -573,14 +717,19 @@ x
               </h2>
             </div>
 
-            {/* Quote Clue #2 */}
-            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-sky-500 text-left shadow-sm">
+            {/* Quote Clue #2 dengan animasi typing */}
+            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-sky-500 text-left shadow-sm min-h-[140px]">
               <p className="text-xl sm:text-3xl text-sky-700 mb-2.5 leading-snug">
-                &ldquo;Aku menjadi bagian dari sesuatu yang di abadikan seseorang di media sosial. Bukan karena aku langka, tetapi karena ada seseorang yang begitu menyukai keindahanku. Apakah aku?&rdquo;
+                &ldquo;{displayedClue2}&rdquo;
+                {displayedClue2.length < 165 && (
+                  <span className="inline-block w-1.5 h-4 bg-sky-500 ml-1 animate-pulse align-middle" />
+                )}
               </p>
-              <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium">
-                Sesuatu yang sederhana, tapi selalu berhasil mencuri perhatianmu dan membuat matamu berbinar setiap kali melihatnya.
-              </p>
+              {displayedClue2.length >= 165 && (
+                <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium animate-fade-in">
+                  Sesuatu yang sederhana, tapi selalu berhasil mencuri perhatianmu dan membuat matamu berbinar setiap kali melihatnya.
+                </p>
+              )}
             </div>
 
             <p className="text-stone-500 text-[11px] sm:text-sm italic">
@@ -628,14 +777,19 @@ x
               </h2>
             </div>
 
-            {/* Quote Clue #3 */}
-            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-rose-500 text-left shadow-sm">
+            {/* Quote Clue #3 dengan animasi typing */}
+            <div className="p-5 sm:p-7 glass-card-inner rounded-2xl border-l-4 border-rose-500 text-left shadow-sm min-h-[140px]">
               <p className="text-xl sm:text-3xl text-rose-600 mb-2.5 leading-snug">
-                &ldquo;Ada pertarungan yang tidak terlihat oleh siapa pun. Bukan tentang menang atau kalah, bukan pula tentang siapa yang paling kuat. Namun, tentang keberanian untuk menunjukan satu kemungkinan yang belum tentu sesuai harapan.&rdquo;
+                &ldquo;{displayedClue3}&rdquo;
+                {displayedClue3.length < 210 && (
+                  <span className="inline-block w-1.5 h-4 bg-rose-500 ml-1 animate-pulse align-middle" />
+                )}
               </p>
-              <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium">
-                Dan keberanian itu adalah mengulurkan tangan kepadamu melalui surat undangan ini...
-              </p>
+              {displayedClue3.length >= 210 && (
+                <p className="text-stone-700 text-xs sm:text-base leading-relaxed not-italic font-medium animate-fade-in">
+                  Dan keberanian itu adalah mengulurkan tangan kepadamu melalui surat undangan ini...
+                </p>
+              )}
             </div>
 
             {/* Explicit Deep Hope Section */}
@@ -789,7 +943,7 @@ x
                 >
                   <Send className="w-4 h-4 sm:w-5 sm:h-5" />
                   <span>
-                    {decision ? "Kirimkan Jawaban Undangan ✨" : "Pilih jawabanmu di atas dulu ya 🥺"}
+                    {decision ? "Kirimkan Jawaban Undangan" : "Pilih jawabanmu di atas dulu ya 🥺"}
                   </span>
                 </button>
 
